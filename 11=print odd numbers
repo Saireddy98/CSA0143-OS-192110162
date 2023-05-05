@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+void odd_numbers() {
+    pid_t pid = getpid();
+    printf("I am the first child process (PID %d) and I will print the odd numbers:\n", pid);
+    for (int i = 1; i <= 10; i += 2) {
+        printf("%d ", i);
+    }
+    printf("\n");
+}
+
+void even_numbers() {
+    pid_t pid = getpid();
+    printf("I am the second child process (PID %d) and I will print the even numbers:\n", pid);
+    for (int i = 2; i <= 10; i += 2) {
+        printf("%d ", i);
+    }
+    printf("\n");
+}
+
+void multiples_of_3() {
+    pid_t pid = getpid();
+    printf("I am the third child process (PID %d) and I will print the multiples of 3:\n", pid);
+    for (int i = 3; i <= 30; i += 3) {
+        printf("%d ", i);
+    }
+    printf("\n");
+}
+
+void multiples_of_5() {
+    pid_t pid = getpid();
+    printf("I am the fourth child process (PID %d) and I will print the multiples of 5:\n", pid);
+    for (int i = 5; i <= 50; i += 5) {
+        printf("%d ", i);
+    }
+    printf("\n");
+}
+
+int main() {
+    pid_t pid1, pid2, pid3, pid4;
+    pid1 = fork();
+    if (pid1 == 0) {
+        odd_numbers();
+    } else {
+        pid2 = fork();
+        if (pid2 == 0) {
+            even_numbers();
+        } else {
+            pid3 = fork();
+            if (pid3 == 0) {
+                multiples_of_3();
+            } else {
+                pid4 = fork();
+                if (pid4 == 0) {
+                    multiples_of_5();
+                } else {
+                    printf("I am the parent process (PID %d) and I have created 4 child processes (PID %d, %d, %d, %d).\n", getpid(), pid1, pid2, pid3, pid4);
+                }
+            }
+        }
+    }
+    return 0;
+}
